@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Authorization Code</title><link rel="stylesheet" href="style.css"></head>
+<body><main>
+<h1>Authorization code</h1>
+<div class="card">
+  <p id="hint">Copy this code and paste it into the terminal.</p>
+  <code id="code">…</code>
+  <button id="copy" type="button">Copy code</button>
+</div>
+<script>
+  const params = new URLSearchParams(location.search);
+  const code = (params.get("code") || "").replace(/#_$/, "");
+  const error = params.get("error_description") || params.get("error");
+  document.getElementById("code").textContent = code || (error ? "Error: " + error : "No code in the URL.");
+  if (!code) { document.getElementById("copy").hidden = true; document.getElementById("hint").textContent = "Authorization did not complete."; }
+  document.getElementById("copy").addEventListener("click", async () => {
+    try { await navigator.clipboard.writeText(code); document.getElementById("copy").textContent = "Copied"; } catch {}
+  });
+</script>
+</main></body></html>
